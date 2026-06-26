@@ -1,0 +1,216 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ bio.name }} — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <span class="nav-logo">{{ bio.name|default:"Portfolio" }}</span>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger">&#9776;</button>
+    </div>
+  </nav>
+
+  <!-- HERO / BIO -->
+  <section class="hero" id="about">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <p class="hero-eyebrow">Hello, I'm</p>
+        <h1 class="hero-name">{{ bio.name|default:"Talha Ijaz" }}</h1>
+        <h2 class="hero-title">{{ bio.job_title|default:"Student & Aspiring Developer" }}</h2>
+        <p class="hero-desc">{{ bio.description|default:"Passionate about software development and cloud computing." }}</p>
+        <div class="hero-actions">
+          {% if bio.github %}<a href="{{ bio.github }}" class="btn btn-primary" target="_blank">GitHub</a>{% endif %}
+          {% if bio.linkedin %}<a href="{{ bio.linkedin }}" class="btn btn-outline" target="_blank">LinkedIn</a>{% endif %}
+          <a href="#contact" class="btn btn-outline">Get In Touch</a>
+        </div>
+      </div>
+      <div class="hero-image-wrap">
+        {% if bio.profile_picture %}
+          <img src="{{ bio.profile_picture.url }}" alt="{{ bio.name }}" class="hero-img">
+        {% else %}
+          <img src="{% static 'images/profile.jpg' %}" alt="{{ bio.name }}" class="hero-img">
+        {% endif %}
+        <div class="hero-img-ring"></div>
+      </div>
+    </div>
+    <div class="scroll-hint">↓</div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="section section-alt" id="education">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Academic Background</span>
+        <h2 class="section-title">Education</h2>
+      </div>
+      <div class="edu-grid">
+        {% for edu in educations %}
+        <div class="edu-card">
+          <div class="edu-years">{{ edu.start_year }} — {{ edu.end_year }}</div>
+          <h3 class="edu-degree">{{ edu.degree }}</h3>
+          <p class="edu-inst">{{ edu.institution }}</p>
+          {% if edu.description %}<p class="edu-desc">{{ edu.description }}</p>{% endif %}
+        </div>
+        {% empty %}
+        <p>No education records found.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="section" id="skills">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">What I Know</span>
+        <h2 class="section-title">Skills</h2>
+      </div>
+      <div class="skills-wrapper">
+        {% if technical_skills %}
+        <div class="skills-group">
+          <h3 class="skills-group-title">Technical Skills</h3>
+          <div class="skills-list">
+            {% for skill in technical_skills %}
+            <div class="skill-item">
+              <div class="skill-info">
+                <span class="skill-name">{{ skill.name }}</span>
+                <span class="skill-pct">{{ skill.proficiency }}%</span>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-fill" data-width="{{ skill.proficiency }}"></div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        {% if professional_skills %}
+        <div class="skills-group">
+          <h3 class="skills-group-title">Professional Skills</h3>
+          <div class="skills-list">
+            {% for skill in professional_skills %}
+            <div class="skill-item">
+              <div class="skill-info">
+                <span class="skill-name">{{ skill.name }}</span>
+                <span class="skill-pct">{{ skill.proficiency }}%</span>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-fill" data-width="{{ skill.proficiency }}"></div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="section section-alt" id="experience">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Work History</span>
+        <h2 class="section-title">Experience</h2>
+      </div>
+      <div class="timeline">
+        {% for exp in experiences %}
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-period">{{ exp.start_date }} — {{ exp.end_date }}</div>
+            <h3 class="timeline-title">{{ exp.title }}</h3>
+            <p class="timeline-org">{{ exp.organization }}</p>
+            <p class="timeline-desc">{{ exp.description }}</p>
+          </div>
+        </div>
+        {% empty %}
+        <p>No experience records found.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="section" id="projects">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">What I've Built</span>
+        <h2 class="section-title">Projects</h2>
+      </div>
+      <div class="projects-grid">
+        {% for project in projects %}
+        <div class="project-card">
+          <div class="project-number">0{{ forloop.counter }}</div>
+          <h3 class="project-title">{{ project.title }}</h3>
+          <p class="project-desc">{{ project.description }}</p>
+          <div class="project-tech">
+            {% for tech in project.tech_stack.split %}
+            <span class="tech-tag">{{ tech|cut:"," }}</span>
+            {% endfor %}
+          </div>
+          {% if project.link %}
+          <a href="{{ project.link }}" class="project-link" target="_blank">View Project →</a>
+          {% endif %}
+        </div>
+        {% empty %}
+        <p>No projects found.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section section-dark" id="contact">
+    <div class="container contact-inner">
+      <div class="section-header">
+        <span class="section-tag light">Let's Talk</span>
+        <h2 class="section-title light">Get In Touch</h2>
+      </div>
+      <div class="contact-details">
+        {% if bio.email %}
+        <a href="mailto:{{ bio.email }}" class="contact-link">
+          <span class="contact-icon">✉</span>
+          {{ bio.email }}
+        </a>
+        {% endif %}
+        {% if bio.github %}
+        <a href="{{ bio.github }}" class="contact-link" target="_blank">
+          <span class="contact-icon">⌥</span>
+          GitHub Profile
+        </a>
+        {% endif %}
+        {% if bio.linkedin %}
+        <a href="{{ bio.linkedin }}" class="contact-link" target="_blank">
+          <span class="contact-icon">in</span>
+          LinkedIn Profile
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2026 {{ bio.name|default:"Talha Ijaz" }}. Built with Django.</p>
+  </footer>
+
+  <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
